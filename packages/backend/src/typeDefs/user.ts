@@ -1,6 +1,8 @@
 import gql from 'graphql-tag'
 
-export default gql`
+import { DocumentNode } from 'graphql'
+
+const userTypeDef: DocumentNode = gql`
   type User {
     _id: ID!
     name: String!
@@ -10,3 +12,5 @@ export default gql`
     token: String
   }
 `
+
+export default userTypeDef

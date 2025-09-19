@@ -6,7 +6,7 @@ import { User } from '../../../models/User'
 import dotenv from 'dotenv'
 dotenv.config({ path: '.env.local' })
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret_dev'
+const JWT_SECRET: string = process.env.JWT_SECRET || 'secret_dev'
 
 const login = async (
   _parent: any,
@@ -17,13 +17,14 @@ const login = async (
   const { email, password } = args
   const user = await User.findOne({ email })
   if (!user) throw new Error('Usuário não encontrado')
-
   const valid = await bcrypt.compare(password, user.password)
   if (!valid) throw new Error('Senha inválida')
 
-  const token = jwt.sign({ sub: user._id, email: user.email }, JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-  })
+  const token = jwt.sign(
+    { sub: user._id, email: user.email },
+    JWT_SECRET as jwt.Secret,
+    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' } as jwt.SignOptions
+  )
 
   return {
     _id: user._id,
