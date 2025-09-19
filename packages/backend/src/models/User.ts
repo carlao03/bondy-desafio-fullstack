@@ -8,3 +8,11 @@ const UserSchema = new mongoose.Schema({
 })
 
 export const User = mongoose.model('user', UserSchema)
+
+// Adiciona campo token ao retorno do User para GraphQL
+UserSchema.set('toObject', {
+  transform: function (doc, ret) {
+    ret.token = ret.token || null
+    return ret
+  },
+})
